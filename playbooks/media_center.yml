@@ -1,0 +1,11 @@
+---
+
+- name: Setup Media Center
+  hosts: docker
+  tasks: 
+    - name: Install containers
+      community.docker.docker_compose:
+        project_src: ../docker-compose/media-center
+        files:
+        - docker-compose.yml
+        

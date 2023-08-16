@@ -1,5 +1,6 @@
 ---
-- hosts: proxmox
+- name: Setup Proxmox
+  hosts: proxmox
   tasks:
     - name: Add non-prod repository
       lineinfile:
