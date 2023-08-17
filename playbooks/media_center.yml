@@ -3,9 +3,28 @@
 - name: Setup Media Center
   hosts: docker
   tasks: 
-    - name: Install containers
+    - name: Initialize containers
       community.docker.docker_compose:
-        project_src: ../docker-compose/media-center
-        files:
-        - docker-compose.yml
+        project_src: /root/homeserver-ansible/docker-compose/media-center
+        state: present
+    - name: Stop containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/media-center
+        state: absent
+    - name: List all zip files
+      find:
+        paths: "/root/homeserver-ansible/docker-compose/media-center/backup"
+        patterns: "*.zip"
+      register: zip_files
+    - name: Unzip each backup to appdata
+      unarchive:
+        src: "{{ item.path }}"
+        dest: "/root/appdata/{{ item.path | basename | splitext | first }}"
+        remote_src: yes
+      loop: "{{ zip_files.files }}"
+    - name: Start containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/media-center
+        state: present
+
         
