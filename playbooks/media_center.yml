@@ -13,7 +13,7 @@
         state: absent
     - name: List all zip files
       find:
-        paths: "/root/homeserver-ansible/docker-compose/media-center/backup"
+        paths: "/root/homeserver-ansible/docker-compose/media-center/backups"
         patterns: "*.zip"
       register: zip_files
     - name: Unzip each backup to appdata

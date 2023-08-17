@@ -1,0 +1,31 @@
+version: "2.1"
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/transmission:/config
+      - ${HDD}/downloads:/downloads
+      - ${HDD}/downloads/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+  jdownloader:
+    image: jlesage/jdownloader-2:latest
+    container_name: jdownloader
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/jdownloader:/config
+      - ${HDD}/downloads:/output
+    ports:
+      - 5800:5800
+    restart: unless-stopped

@@ -1,0 +1,23 @@
+---
+
+- name: Setup Downloaders
+  hosts: docker
+  tasks: 
+    - name: Initialize containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/downloader
+        state: present
+    - name: Stop containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/downloader
+        state: absent
+    - name: Copy settings
+      copy:
+        dest:  /root/appdata/transmission
+        src:  /root/homeserver-ansible/docker-compose/downloader/backup/settings.json
+    - name: Start containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/media-center
+        state: present
+
+        
