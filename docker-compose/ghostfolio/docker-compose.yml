@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  ghostfolio-redis:
+    image: redis
+    container_name: redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+    user: ${PGID}:${PUID}
+    environment:
+      - TZ=${TZ}
+    ports:
+      - 6379:6379
+    volumes:
+      - ${APPDATA}/ghostfolio/redis:/data
+    restart: unless-stopped
+
+  ghostfolio-db:
+    image: postgres
+    container_name: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "ghostfoliodb", "-U", "ghostfoliouser"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    user: ${PGID}:${PUID}
+    volumes:
+      - ${APPDATA}/ghostfolio/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=ghostfolioprod
+      - POSTGRES_USER=ghostfoliouser
+      - POSTGRES_PASSWORD=ghostfoliopass
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+
+  ghostfolio:
+    image: ghostfolio/ghostfolio:latest
+    container_name: ghostfolio
+    environment:
+      - NODE_ENV=production
+      - ACCESS_TOKEN_SALT=0029cbdf-6895-4fca-9b33-b7d7530d449c
+      - JWT_SECRET_KEY=0029cbdf-6895-4fca-9b33-b7d7530d449c
+      - REDIS_HOST=10.0.173.81
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
+      - DATABASE_URL=postgresql://ghostfoliouser:ghostfoliopass@10.0.173.81:5432/ghostfolioprod?sslmode=prefer
+    ports:
+      - 8435:3333
+    restart: always
+    depends_on:
+      ghostfolio-db:
+        condition: service_started
+      ghostfolio-redis:
+        condition: service_healthy

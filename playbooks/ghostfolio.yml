@@ -1,0 +1,9 @@
+---
+
+- name: Setup Ghostfolio
+  hosts: docker
+  tasks: 
+    - name: Initialize containers
+      community.docker.docker_compose:
+        project_src: /root/homeserver-ansible/docker-compose/ghostfolio
+        state: present
