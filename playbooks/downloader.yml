@@ -17,7 +17,7 @@
         src:  /root/homeserver-ansible/docker-compose/downloader/backup/settings.json
     - name: Start containers
       community.docker.docker_compose:
-        project_src: /root/homeserver-ansible/docker-compose/media-center
+        project_src: /root/homeserver-ansible/docker-compose/downloader
         state: present
 
         
