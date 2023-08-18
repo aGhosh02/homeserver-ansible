@@ -3,20 +3,20 @@
 - name: Setup Photoprism
   hosts: docker
   tasks: 
-    - name: Initialize containers
-      community.docker.docker_compose:
-        project_src: /root/homeserver-ansible/docker-compose/photoprism
-        state: present
-    - name: Stop containers
-      community.docker.docker_compose:
-        project_src: /root/homeserver-ansible/docker-compose/photoprism
-        state: absent
-    - name: Restore
+    - name: Create directory
+      file:
+        path: /root/appdata/database
+        state: directory
+        owner: 999
+        group: 999
+    - name: Restore Backup
       unarchive:
         src:  /root/database.tar.gz
         dest:  /root/appdata/database
+        owner: 999
+        group: 999
         remote_src: yes
-    - name: Start containers
+    - name: Initialize containers
       community.docker.docker_compose:
         project_src: /root/homeserver-ansible/docker-compose/photoprism
         state: present

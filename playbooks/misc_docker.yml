@@ -1,0 +1,12 @@
+---
+
+- name: Setup Misc. Docker containers
+  hosts: docker
+  tasks:
+    - name: watchtower
+      docker_container: # HERE the module
+        name: watchtower
+        image: containrrr/watchtower
+        state: started
+        volumes: 
+          - /var/run/docker.sock:/var/run/docker.sock
