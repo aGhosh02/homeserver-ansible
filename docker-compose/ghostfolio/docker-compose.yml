@@ -40,10 +40,10 @@ services:
       - NODE_ENV=production
       - ACCESS_TOKEN_SALT=0029cbdf-6895-4fca-9b33-b7d7530d449c
       - JWT_SECRET_KEY=0029cbdf-6895-4fca-9b33-b7d7530d449c
-      - REDIS_HOST=10.0.173.81
+      - REDIS_HOST=10.0.100.3
       - REDIS_PASSWORD=
       - REDIS_PORT=6379
-      - DATABASE_URL=postgresql://ghostfoliouser:ghostfoliopass@10.0.173.81:5432/ghostfolioprod?sslmode=prefer
+      - DATABASE_URL=postgresql://ghostfoliouser:ghostfoliopass@10.0.100.3:5432/ghostfolioprod?sslmode=prefer
     ports:
       - 8435:3333
     restart: always
