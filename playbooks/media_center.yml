@@ -10,7 +10,8 @@
     - name: Stop containers
       community.docker.docker_compose:
         project_src: /root/homeserver-ansible/docker-compose/media-center
-        state: absent
+        state: present
+        stopped: true
     - name: List all zip files
       find:
         paths: "/root/homeserver-ansible/docker-compose/media-center/backups"
@@ -21,10 +22,11 @@
         src: "{{ item.path }}"
         dest: "/root/appdata/{{ item.path | basename | splitext | first }}"
         remote_src: yes
+        mode: "0777"
       loop: "{{ zip_files.files }}"
-    - name: Start containers
-      community.docker.docker_compose:
-        project_src: /root/homeserver-ansible/docker-compose/media-center
-        state: present
+    # - name: Start containers
+    #   community.docker.docker_compose:
+    #     project_src: /root/homeserver-ansible/docker-compose/media-center
+    #     state: present
 
         
